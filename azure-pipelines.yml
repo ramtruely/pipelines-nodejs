@@ -40,11 +40,21 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+- task: AzureAppServiceManage@0
+  inputs:
+    azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
+    Action: 'Swap Slots'
+    WebAppName: 'nodejsapp6'
+    ResourceGroupName: 'test'
+    SourceSlot: 'stage'
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
     azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
     appType: 'webApp'
     WebAppName: 'nodejsapp6'
+    deployToSlotOrASE: true
+    ResourceGroupName: 'test'
+    SlotName: 'stage'
     packageForLinux: '$(Build.ArtifactStagingDirectory)/*.zip'
   displayName: App deployment  
