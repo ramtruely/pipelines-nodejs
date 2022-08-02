@@ -68,7 +68,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'test'
               SlotName: 'stage'
-              packageForLinux: '$(Pipeline.Workspace)/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)'
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
