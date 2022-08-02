@@ -40,3 +40,11 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
+    appType: 'webApp'
+    WebAppName: 'nodejsapp6'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+  displayName: App deployment  
