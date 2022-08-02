@@ -58,15 +58,6 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: AzureAppServiceManage@0
-            inputs:
-               azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
-               Action: 'Swap Slots'
-               WebAppName: 'nodejsapp6'
-               ResourceGroupName: 'test'
-               SourceSlot: 'stage' 
-            displayName: Manage deployment slots
-
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
@@ -77,7 +68,20 @@ stages:
               ResourceGroupName: 'test'
               SlotName: 'stage'
               packageForLinux: '$(Build.ArtifactStagingDirectory)/*.zip'
-            displayName: App deployment  
+            displayName: Deploying application  
+
+          - task: AzureAppServiceManage@0
+            inputs:
+              azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
+              Action: 'Swap Slots'
+              WebAppName: 'nodejsapp6'
+              ResourceGroupName: 'test'
+              SourceSlot: 'stage'
+              SwapWithProduction: true
+            displayName: Managing the slots  
+            
+              
+
 
 
          
