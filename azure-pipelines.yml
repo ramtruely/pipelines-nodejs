@@ -42,7 +42,7 @@ stages:
       displayName: Archieve the file 
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
         ArtifactName: 'drop'
         publishLocation: 'Container' 
       displayName: Publish Build artifact
@@ -68,7 +68,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'test'
               SlotName: 'stage'
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/drop/*.zip'
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
