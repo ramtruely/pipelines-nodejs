@@ -46,10 +46,32 @@ stages:
         targetPath: '$(Pipeline.Workspace)'
         artifact: 'drop'
         publishLocation: 'pipeline'
-
+        
+- stage: Test
+  displayName: Deploying Testing
+  dependsOn: Build
+  jobs:
+  - deployment: DeployTest    
+    displayName: 'deploy Test'
+    environment: Test
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
+              appType: 'webApp'
+              WebAppName: 'nodejsappatest'
+              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+            displayName: Deploy app to testing environment          
+           
+          
 - stage: Production
   displayName: Deploying production
-  dependsOn: build
+  dependsOn: Test
   jobs:
   - deployment: DeployProd    
     displayName: 'deploy prod'
@@ -57,8 +79,9 @@ stages:
     strategy:
       runOnce:
         deploy:
-          steps:
-           
+          steps:      
+                 
+          
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
@@ -68,7 +91,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'test'
               SlotName: 'stage'
-              packageForLinux: '$(Pipeline.Workspace)'
+              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
