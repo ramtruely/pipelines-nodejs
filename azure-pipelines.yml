@@ -68,7 +68,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'test'
               SlotName: 'stage'
-              packageForLinux: '$(System.ArtifactsDirectory)/*.zip'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
