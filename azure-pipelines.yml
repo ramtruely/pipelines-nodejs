@@ -67,7 +67,7 @@ stages:
               WebAppName: 'nodejsappatest'
               packageForLinux: '$(Pipeline.Workspace)/drop'
               enableCustomDeployment: true
-              DeploymentType: 'zipDeploy'
+              DeploymentType: 'webDeploy'
               TakeAppOfflineFlag: false
             displayName: Deploy app to testing environment          
            
@@ -96,7 +96,7 @@ stages:
               SlotName: 'stage'
               packageForLinux: '$(Pipeline.Workspace)/drop'
               enableCustomDeployment: true
-              DeploymentType: 'zipDeploy'
+              DeploymentType: 'webDeploy'
               TakeAppOfflineFlag: false
             displayName: Deploying application  
 
