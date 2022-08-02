@@ -66,6 +66,9 @@ stages:
               appType: 'webApp'
               WebAppName: 'nodejsappatest'
               packageForLinux: '$(Pipeline.Workspace)/drop'
+              enableCustomDeployment: true
+              DeploymentType: 'zipDeploy'
+              TakeAppOfflineFlag: false
             displayName: Deploy app to testing environment          
            
           
@@ -92,6 +95,9 @@ stages:
               ResourceGroupName: 'test'
               SlotName: 'stage'
               packageForLinux: '$(Pipeline.Workspace)/drop'
+              enableCustomDeployment: true
+              DeploymentType: 'zipDeploy'
+              TakeAppOfflineFlag: false
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
