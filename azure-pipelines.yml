@@ -5,8 +5,6 @@
 
 trigger:
 - master1
-
-
   
 stages:
 - stage: Build
@@ -51,12 +49,33 @@ stages:
   displayName: Deploying production
   dependsOn: build
   jobs:
-  - job: DeployProd
+  - deployment: DeployProd    
     displayName: 'deploy prod'
     environment: Production
-    
-        
-           
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureAppServiceManage@0
+            inputs:
+               azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
+               Action: 'Swap Slots'
+               WebAppName: 'nodejsapp6'
+               ResourceGroupName: 'test'
+               SourceSlot: 'stage' 
+            displayName: Manage deployment slots
+
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
+              appType: 'webApp'
+              WebAppName: 'nodejsapp6'
+              deployToSlotOrASE: true
+              ResourceGroupName: 'test'
+              SlotName: 'stage'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/*.zip'
+            displayName: App deployment  
 
 
          
@@ -64,47 +83,4 @@ stages:
 
       
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
 
-
-   
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/TEST-*.xml'
-  displayName: Publishing test reports
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
-  displayName: Archieve the file  
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-- task: AzureAppServiceManage@0
-  inputs:
-    azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
-    Action: 'Swap Slots'
-    WebAppName: 'nodejsapp6'
-    ResourceGroupName: 'test'
-    SourceSlot: 'stage'
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
-    appType: 'webApp'
-    WebAppName: 'nodejsapp6'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'test'
-    SlotName: 'stage'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/*.zip'
-  displayName: App deployment  
