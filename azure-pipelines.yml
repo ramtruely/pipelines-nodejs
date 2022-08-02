@@ -5,6 +5,10 @@
 
 trigger:
 - master1
+
+pool:
+  name: Default
+  vmImage: ubuntu-latest
   
 stages:
 - stage: Build
@@ -12,9 +16,7 @@ stages:
   jobs: 
   - job: Buid_test
     displayName: 'Build and test'
-    pool:
-      name: Default
-      vmImage: ubuntu-latest 
+     
     steps: 
     - task: NodeTool@0
       inputs:
