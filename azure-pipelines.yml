@@ -65,7 +65,7 @@ stages:
               azureSubscription: 'Dev(c308cf65-784f-44a0-bcba-c4f5e93f1454)'
               appType: 'webApp'
               WebAppName: 'nodejsappatest'
-              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/drop'
             displayName: Deploy app to testing environment          
            
           
@@ -91,7 +91,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'test'
               SlotName: 'stage'
-              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/drop'
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
