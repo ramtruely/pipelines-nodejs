@@ -34,18 +34,18 @@ stages:
       displayName: Publishing test reports  
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.BinariesDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: true
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         replaceExistingArchive: true
       displayName: Archieve the file 
-    - task: PublishBuildArtifacts@1
+   
+    - task: PublishPipelineArtifact@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/drop'
-        ArtifactName: 'drop'
-        publishLocation: 'Container' 
-      displayName: Publish Build artifact
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'drop'
+        publishLocation: 'pipeline'
 
 - stage: Production
   displayName: Deploying production
@@ -68,7 +68,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'test'
               SlotName: 'stage'
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/drop/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/*.zip'
             displayName: Deploying application  
 
           - task: AzureAppServiceManage@0
